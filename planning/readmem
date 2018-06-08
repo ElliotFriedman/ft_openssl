@@ -1,0 +1,5 @@
+
+			LLDB Command
+
+memory read --size 2 --format x --count 16 0x00006020000000f0
+memory read --size 2 --format x --count 16 varname || address
