@@ -6,11 +6,11 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/06/07 17:25:34 by efriedma         ###   ########.fr        #
+#    Updated: 2018/06/08 22:51:30 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -g -fsanitize=address -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
+CFLAGS = -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_openssl
 
@@ -28,7 +28,7 @@ all: $(NAME)
 	
 $(NAME): $(OBJ)
 	@make -C ft_printf
-	gcc -g -fsanitize=address *.o ft_printf/libftprintf.a -o $(NAME)
+	gcc  *.o ft_printf/libftprintf.a -o $(NAME)
 
 clean:
 	rm $(OBJ)

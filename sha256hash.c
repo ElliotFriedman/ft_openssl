@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 23:35:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 22:43:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 23:44:51 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@ const unsigned int k[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x39
 	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
 
-void	sha256hash(something)
+unsigned int	rr(unsigned int a, unsigned int shift)
+{
+	return ((a >> shift) | (a << (32 - shift)));
+}
+
+void			sha256hash(something)
 {
 	unsigned int	a;
 	unsigned int	b;
@@ -52,53 +57,56 @@ void	sha256hash(something)
 	ctr = 0;
 	while (ctr < h->bytes)
 	{
-		create a 64-entry message schedule array w[0..63] of 32-bit words
-			(The initial values in w[0..63] don't matter, so many implementations zero them here)
-			copy chunk into first 16 words w[0..15] of the message schedule array
+		/*		create a 64-entry message schedule array w[0..63] of 32-bit words
+				(The initial values in w[0..63] don't matter, so many implementations zero them here)
+				copy chunk into first 16 words w[0..15] of the message schedule array
 
-			Extend the first 16 words into the remaining 48 words w[16..63] of the message schedule array:
-			while (i < 63)
-			{
-				s0 = (w[i-15] rightrotate 7) ^ (w[i-15] rightrotate 18) ^ (w[i-15] >> 3);
-        		s1 = (w[i-2] rightrotate 17) xor (w[i-2] rightrotate 19) ^ (w[i-2] >> 10);
-				w[i] = w[i - 16] + s0 + w[i - 7] + s1;
-				a = h0;
-				b = h1;
-				c = h2;
-				d = h3;
-				e = h4;
-				f = h5;
-				g = h6;
-				h = h7;
-				while (i < 63)
-				{
-					S1 = (e rightrotate 6) xor (e rightrotate 11) xor (e rightrotate 25);
-					ch = (e & f) ^ ((~e) & g);
-					temp1 = h + S1 + ch + k[i] + w[i];
-					S0 = (a rightrotate 2) xor (a rightrotate 13) xor (a rightrotate 22);
-					maj = (a & b) ^ (a & c) ^ (b & c);
-					temp2 = S0 + maj;
-
-					h = g;
-					g = f;
-					f = e;
-					e = d + temp1;
-					d = c;
-					c = b;
-					b = a;
-					a = temp1 + temp2;
-					i++;
-				}
-				h0 = h0 + a;
-				h1 = h1 + b;
-				h2 = h2 + c;
-				h3 = h3 + d;
-				h4 = h4 + e;
-				h5 = h5 + f;
-				h6 = h6 + g;
-				h7 = h7 + h;
-				i++;
-			}
+				Extend the first 16 words into the remaining 48 words w[16..63] of the message schedule array:
+				*/
+		i = 16;
+		while (i < 64)
+		{
+			s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ rr(w[i - 15], 3);
+			s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ rr(w[i - 2], 10);
+			w[i] = w[i - 16] + s0 + w[i - 7] + s1;
+			i++;
+		}
+		i = 0;
+		a = h0;
+		b = h1;
+		c = h2;
+		d = h3;
+		e = h4;
+		f = h5;
+		g = h6;
+		h = h7;
+		while (i < 63)
+		{
+			S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25);
+			ch = (e & f) ^ ((~e) & g);
+			temp1 = h + S1 + ch + k[i] + w[i];
+			S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22);
+			maj = (a & b) ^ (a & c) ^ (b & c);
+			temp2 = S0 + maj;
+			h = g;
+			g = f;
+			f = e;
+			e = d + temp1;
+			d = c;
+			c = b;
+			b = a;
+			a = temp1 + temp2;
+			i++;
+		}
+		h0 += a;
+		h1 += b;
+		h2 += c;
+		h3 += d;
+		h4 += e;
+		h5 += f;
+		h6 += g;
+		h7 += h;
+		i++;
 		ctr += 16;
 	}
 	print_bendian();
