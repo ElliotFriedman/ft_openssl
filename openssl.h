@@ -6,63 +6,54 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/07 17:08:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 19:03:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OPENSSL_H
-#define OPENSSL_H
-#include "ft_printf/includes/ft_printf.h"
-#include "ft_printf/libft/libft.h"
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
-#include <limits.h>
-#include <stdlib.h>
+# define OPENSSL_H
+# include "ft_printf/includes/ft_printf.h"
+# include "ft_printf/libft/libft.h"
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <unistd.h>
+# include <limits.h>
+# include <stdlib.h>
 
-typedef struct	s_hash
+/*
+ *this is for storing values associated with the md5 algorithm
+ */
+
+typedef struct			s_hash
 {
-	//name of file we opened
 	char				*name;
-	//fd boolean
 	size_t				fd;
-	//initial value of all data values read in
 	unsigned long long	ini;
-	//data we read in and are going to hash
 	char				*data;
-	//how many bytes we have to hash
 	size_t				bytes;
-	//how many arrays we have
 	int					arrnum;
-	//2d array of uints
 	unsigned int		*arr;
 }						t_hash;
+
+/*
+ *this is for function pointers and storing the name of the program for dispatch table use
+ */
 
 typedef	struct			s_type
 {
 	char				*name;
-	//function pointer
 	void				*ptr;
-
 }						t_type;
 
+//will figure out if this is neccessary in the future
 
 typedef struct			s_hash256
 {
 	char				*data;
 }						t_hash256;
 
-/*
-typedef struct			s_flag
-{
-	int					on;
-	int					p;
-	int					q;
-	int					r;
-	int					s;
-}						t_flag;
-*/
+//options for output, string, no intro to the hash output, etc...
 
 typedef struct			s_opt
 {
@@ -73,11 +64,33 @@ typedef struct			s_opt
 	int					s;
 }						t_opt;
 
-//could this array be unsigned
+//this is for creating hashing values
+
+typedef struct			s_val
+{
+	unsigned int		a0;
+	unsigned int		b0;
+	unsigned int		c0;
+	unsigned int		d0;
+}						t_val;
+
+//this is for creating hashing values
+
+typedef struct			s_iter
+{
+	unsigned int		A;
+	unsigned int		B;
+	unsigned int		C;
+	unsigned int		D;
+	unsigned int		F;
+	unsigned int		i;
+	unsigned int		g;
+	unsigned int		d;
+}						t_iter;
+
 int						get_opt(int argc, char **argv, t_opt *new, int i);
 void					md5hash(char *str);
-void					hash(t_hash *h);
-//void					options(int argc, char **argv, t_flag *flag);
+void					hash(t_hash *h, t_opt *new);
 void					md5start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 15:48:33 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 15:46:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:33:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,9 @@ void	free_struct(t_type **done)
 	while (i < total)
 	{
 		free(done[i]->name);
-//		free(done[i]->ptr);
 		free(done[i]);
 		i++;
 	}
-//	free(done);
 }
 
 int		main(int argc, char **argv)

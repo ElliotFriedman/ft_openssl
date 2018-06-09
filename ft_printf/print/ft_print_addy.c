@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 18:59:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/02 15:22:48 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:48:46 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int		print_addy(t_data *curr, va_list list)
 int		print_binary(t_data *cur, va_list list)
 {
 	unsigned long long	nbr;
-	char			*print;
-	char			*buf;
-	
+	char				*print;
+	char				*buf;
+
 	ft_strncpy(cur->mod, "ll", 2);
 	nbr = uint_flags(cur, list);
 	buf = 0;

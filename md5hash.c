@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:18:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 16:09:05 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 19:19:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,89 +29,108 @@ const unsigned int K[64] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
 
-const int s[64] = {7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
-	5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
-	4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
-	6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21};
-
-unsigned int		leftrotate(unsigned int x, int c)
+const int s[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17,
+	22, 5, 9, 14, 20, 5, 9, 14, 20,  5,  9, 14, 20, 5, 9, 14, 20,
+	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+	6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
+/*
+void	print_byte(unsigned int a)
 {
-	return ((x << c) | (x >> (32 - c)));
-}
-
-void	hash(t_hash *h)
-{
-	unsigned int a0 = 0x67452301;
-	unsigned int b0 = 0xefcdab89;
-	unsigned int c0 = 0x98badcfe;
-	unsigned int d0 = 0x10325476;
-	unsigned int A;
-	unsigned int B;
-	unsigned int C;
-	unsigned int D;
-	int	i;
-	unsigned int	F;
-	unsigned int g;
-	size_t	d;
-	unsigned int	ctr;
 	unsigned char	*msg;
 
+	msg = (unsigned char*)&a;
+	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
+}
+*/
+
+void	handle_out(t_val new, t_hash *h, t_opt *opt)
+{
+	unsigned char	*msg;
+
+	if ((opt->on && !opt->s && !opt->q) || (h->fd && !opt->q))
+		ft_printf("MD5 (%s) = ", h->name);
+	else if (opt->on && opt->s && !opt->q)
+		ft_printf("MD5 (\"%s\") = ", h->name);
+	msg = (unsigned char*)&new.a0;
+	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
+	msg = (unsigned char*)&new.b0;
+	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
+	msg = (unsigned char*)&new.c0;
+	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
+	msg = (unsigned char*)&new.d0;
+	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
+	ft_putstr("\n");
+	h->fd = 0;
+}
+
+void	initv(t_val *new)
+{
+	new->a0 = 0x67452301;
+	new->b0 = 0xefcdab89;
+	new->c0 = 0x98badcfe;
+	new->d0 = 0x10325476;
+}
+
+void	initz(t_iter *zed, t_val *new)
+{
+	zed->A = new->a0;
+	zed->B = new->b0;
+	zed->C = new->c0;
+	zed->D = new->d0;
+	zed->i = -1;
+}
+
+void	whilec(t_iter *zed, t_hash *h, size_t ctr)
+{
+	if (zed->i <= 15)
+	{
+		zed->F = (zed->B & zed->C) | ((~zed->B) & zed->D);
+		zed->g = zed->i;
+	}
+	else if (zed->i <= 31)
+	{
+		zed->F = (zed->D & zed->B) | ((~zed->D) & zed->C);
+		zed->g = (5 * zed->i + 1) % 16;
+	}
+	else if (zed->i <= 47)
+	{
+		zed->F = zed->B ^ zed->C ^ zed->D;
+		zed->g = (3 * zed->i + 5) % 16;
+	}
+	else if (zed->i <= 63)
+	{
+		zed->F = zed->C ^ (zed->B | (~zed->D));
+		zed->g = (7 * zed->i) % 16;
+	}
+	zed->F = zed->F + zed->A + K[zed->i] + h->arr[zed->g + ctr];
+	zed->A = zed->D;
+	zed->D = zed->C;
+	zed->C = zed->B;
+	zed->B = zed->B + ((zed->F << s[zed->i]) | (zed->F >> (32 - s[zed->i])));
+}
+
+void	hash(t_hash *h, t_opt *opt)
+{
+	t_val			new;
+	t_iter			zed;
+	unsigned int	ctr;
+	size_t			d;
+
+	initv(&new);
+	initz(&zed, &new);
 	ctr = 0;
 	d = 0;
 	while (d < h->bytes)
-	{  
-		i = 0;
-		A = a0;
-		B = b0;
-		C = c0;
-		D = d0;
-		while (i < 64)
-		{
-			if (i <= 15)
-			{
-				F = (B & C) | ((~B) & D);
-				g = i;
-			}
-			else if (i <= 31)
-			{
-				F = (D & B) | ((~D) & C);
-				g = (5 * i + 1) % 16;
-			}
-			else if (i <= 47)
-			{
-				F = B ^ C ^ D;
-				g = (3 * i + 5) % 16;
-			}
-			else if (i <= 63)
-			{
-				F = C ^ (B | (~D));
-				g = (7 * i) % 16;
-			}
-			F = F + A + K[i] + h->arr[g + ctr];
-			A = D;
-			D = C;
-			C = B;
-			B = B + leftrotate(F, s[i]);
-			i++;
-		}
+	{
+		initz(&zed, &new);
+		while (++zed.i < 64)
+			whilec(&zed, h, ctr);
 		ctr += 16;
-		a0 += A;
-		b0 += B;
-		c0 += C;
-		d0 += D;
+		new.a0 += zed.A;
+		new.b0 += zed.B;
+		new.c0 += zed.C;
+		new.d0 += zed.D;
 		d += 64;
 	}
-	if (h->fd)
-		ft_printf("MD5 (%s) = ", h->name);
-//	printf("\n\n%s\n\n", h->name);
-	msg = (unsigned char *)&a0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char *)&b0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char *)&c0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char *)&d0;
-	ft_printf("%02x%02x%02x%02x\n", msg[0], msg[1], msg[2], msg[3]);
-	//caller will handle all memory
-	h->fd = 0;
+	handle_out(new, h, opt);
 }

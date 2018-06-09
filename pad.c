@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/06 15:47:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:46:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	block_end(t_hash *h)
 {
-	char	*tmp;
-	char	*ctmp;
-	unsigned long long		*max;
+	char				*tmp;
+	char				*ctmp;
+	unsigned long long	*max;
 
 	max = ft_memalloc(8);
 	*max = 8 * h->ini;
@@ -43,21 +43,6 @@ char	*add_byte(t_hash *h)
 	return (h->data);
 }
 
-void	p_bytes(void *ptr, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < size)
-	{
-		ft_printf("%#2p ", ((unsigned char *)ptr)[i]);
-		i++;
-	}
-	ft_printf("\n\n\n		-----Total Bytes printed %d-----\n\n", i);
-}
-
-
-
 void	epad(t_hash *h)
 {
 	int				dif;
@@ -75,8 +60,6 @@ void	epad(t_hash *h)
 		h->data = add_byte(h);
 		dif += 8;
 	}
-//	p_bytes(h->data, h->bytes);
 	free(buf);
 	block_end(h);
-//	p_bytes(h->data, h->bytes);
 }

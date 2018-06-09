@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 23:35:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 15:47:16 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 22:43:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,21 @@ void	sha256hash(something)
 	unsigned int	s1;
 	unsigned int	S1;
 	unsigned int	S0;
+	size_t			ctr;
 
-	while (x)	
+	ctr = 0;
+	while (ctr < h->bytes)
 	{
 		create a 64-entry message schedule array w[0..63] of 32-bit words
 			(The initial values in w[0..63] don't matter, so many implementations zero them here)
 			copy chunk into first 16 words w[0..15] of the message schedule array
 
 			Extend the first 16 words into the remaining 48 words w[16..63] of the message schedule array:
-			for (i from 16 to 63)
+			while (i < 63)
 			{
-				s0 = (w[i-15] >> 7) ^ (w[i-15] >> 18) ^ (w[i-15] >> 3);
-				s1 = (w[i-2] >> 17) ^ (w[i-2] >> 19) ^ (w[i-2] >> 10);
-				w[i] = w[i-16] + s0 + w[i-7] + s1;
+				s0 = (w[i-15] rightrotate 7) ^ (w[i-15] rightrotate 18) ^ (w[i-15] >> 3);
+        		s1 = (w[i-2] rightrotate 17) xor (w[i-2] rightrotate 19) ^ (w[i-2] >> 10);
+				w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 				a = h0;
 				b = h1;
 				c = h2;
@@ -68,12 +70,12 @@ void	sha256hash(something)
 				f = h5;
 				g = h6;
 				h = h7;
-				for (i from 0 to 63)
+				while (i < 63)
 				{
-					S1 = (e >> 6) ^ (e >> 11) ^ (e >> 25);
+					S1 = (e rightrotate 6) xor (e rightrotate 11) xor (e rightrotate 25);
 					ch = (e & f) ^ ((~e) & g);
 					temp1 = h + S1 + ch + k[i] + w[i];
-					S0 = (a >> 2) ^ (a >> 13) ^ (a >> 22);
+					S0 = (a rightrotate 2) xor (a rightrotate 13) xor (a rightrotate 22);
 					maj = (a & b) ^ (a & c) ^ (b & c);
 					temp2 = S0 + maj;
 
@@ -85,6 +87,7 @@ void	sha256hash(something)
 					c = b;
 					b = a;
 					a = temp1 + temp2;
+					i++;
 				}
 				h0 = h0 + a;
 				h1 = h1 + b;
@@ -94,7 +97,10 @@ void	sha256hash(something)
 				h5 = h5 + f;
 				h6 = h6 + g;
 				h7 = h7 + h;
+				i++;
 			}
+		ctr += 16;
 	}
+	print_bendian();
 	digest = h0 append h1 append h2 append h3 append h4 append h5 append h6 append h7;
 }

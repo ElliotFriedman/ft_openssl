@@ -6,34 +6,32 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 14:30:04 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/08 19:20:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
-//./ft_openssl md5 -s -hello -s hi
-
-void	shash(char *thash, t_hash *h, int i)
+void	shash(char *thash, t_hash *h, t_opt *new)
 {
-	printf("\n%s %d\n", thash, i);
+	h->name = ft_strdup(thash);
 	h->data = ft_strdup(thash);
 	h->ini = ft_strlen(h->data);
 	h->bytes = h->ini;
 	epad(h);
 	h->arr = (unsigned int *)h->data;
-	hash(h);
+	hash(h, new);
 	ft_memdel((void**)&h->data);
 }
 
-int		fhash(char *fhash, t_hash *h)
+int		fhash(char *fhash, t_hash *h, t_opt *new)
 {
 	if (!ft_fread(fhash, h))
 		return (0);
 	h->name = fhash;
 	epad(h);
 	h->arr = (unsigned int *)h->data;
-	hash(h);
+	hash(h, new);
 	return (1);
 }
 
@@ -46,9 +44,15 @@ void	zeroh(t_opt *h)
 	h->r = 0;
 }
 
+void	error(void)
+{
+	ft_printf("md5: option requires an argument -- s\n");
+	ft_printf("usage: md5 [-pqrtx] [-s string] [files ...]\n");
+	exit(0);
+}
+
 void	md5start(char **argv, int argc)
 {
-	int	fd;
 	t_hash	*h;
 	t_opt	*new;
 	size_t	i;
@@ -56,21 +60,16 @@ void	md5start(char **argv, int argc)
 	i = 2;
 	new = ft_memalloc(sizeof(t_opt));
 	h = ft_memalloc(sizeof(t_hash));
-	fd = 0;
 	get_opt(argc, argv, new, 2);
 	if (argc == 3 && new->on)
-	{
-		ft_printf("md5: option requires an argument -- s\n");
-		ft_printf("usage: md5 [-pqrtx] [-s string] [files ...]\n");
-		exit(0);
-	}
+		error();
 	while ((int)i < argc)
 	{
 		while (get_opt(argc, argv, new, i) && (int)i < argc)
 			i++;
 		if (new->on && new->s)
-			shash(argv[i], h, i);
-		else if (!fhash(argv[i], h))
+			shash(argv[i], h, new);
+		else if (!fhash(argv[i], h, new))
 		{
 			ft_printf("md5: %s: No such file or directory\n", argv[i]);
 			exit(0);
