@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/07 16:44:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/11 22:03:39 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@ size_t	ft_flen(int fd)
 		return (0);
 	return (ctr);
 }
+/*
+   void	print_bytes(void *ptr, size_t size)
+   {
+   size_t	i;
 
-void	print_bytes(void *ptr, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < size)
-	{
-		ft_printf("%#2p ", ((unsigned char *)ptr)[i]);
-		i++;
-	}
-	ft_printf("\n\n\nTotal Bytes printed %d\n", i);
-}
-
+   i = 0;
+   while (i < size)
+   {
+   ft_printf("%#2p ", ((unsigned char *)ptr)[i]);
+   i++;
+   }
+   ft_printf("\n\n\nTotal Bytes printed %d\n", i);
+   }
+   */
 int		ft_fread(char *str, t_hash *h)
 {
 	int		fd;
@@ -63,7 +63,34 @@ int		ft_fread(char *str, t_hash *h)
 		h->data = afile;
 		h->ini = asize;
 		h->bytes = h->ini;
+		close(fd);
 		return (1);
 	}
 	return (0);
+}
+
+int		rstdin(t_hash *h)
+{
+	char	buf[2];
+	char	*str;
+	char	*tmp;
+//	char	*s;
+
+	str = ft_strnew(0);
+	h->bytes = 0;
+	buf[1] = 0;
+	if (!isatty(0))
+	{
+		while (read(0, buf, 1) == 1)
+		{
+			tmp = str;
+			str = ft_strjoin(str, buf);
+			h->bytes++;
+			free(tmp);
+		}
+		h->data = str;
+//		ft_printf("%s\n", (char *)h->data);
+	}
+	h->ini = h->bytes;
+	return (h->bytes);
 }

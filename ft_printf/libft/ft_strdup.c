@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 17:23:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/02/24 17:23:45 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/11 14:15:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@ char	*ft_strdup(const char *str)
 	int		i;
 
 	a = (int)ft_strlen(str);
-	cpy = (char*)malloc(sizeof(char) * a + 1);
-	i = -1;
+	cpy = (char*)ft_memalloc(sizeof(char) * a + 1);
+	i = 0;
 	if (cpy)
 	{
-		while (++i < a)
+		while (i < a)
+		{
 			cpy[i] = str[i];
-		cpy[i] = '\0';
+			i++;
+		}
+		//cpy[i] = '\0';
 	}
 	return (cpy);
 }

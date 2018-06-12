@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 19:03:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/11 19:18:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <stdlib.h>
 
 /*
- *this is for storing values associated with the md5 algorithm
+ *this is for storing values associated with the md5 and sha256 algorithm
  */
 
 typedef struct			s_hash
@@ -32,7 +32,6 @@ typedef struct			s_hash
 	unsigned long long	ini;
 	char				*data;
 	size_t				bytes;
-	int					arrnum;
 	unsigned int		*arr;
 }						t_hash;
 
@@ -88,9 +87,26 @@ typedef struct			s_iter
 	unsigned int		d;
 }						t_iter;
 
+//sha hashing struct
+
+typedef struct			s_sha
+{
+	unsigned int		h0;
+	unsigned int		h1;
+	unsigned int		h2;
+	unsigned int		h3;
+	unsigned int		h4;
+	unsigned int		h5;
+	unsigned int		h6;
+	unsigned int		h7;
+}						t_sha;
+
+int						rstdin(t_hash *h);
 int						get_opt(int argc, char **argv, t_opt *new, int i);
 void					md5hash(char *str);
+void					sha256hash(t_hash *hs, t_opt *nopt);
 void					hash(t_hash *h, t_opt *new);
+void					sha256start(char **argv, int argc);
 void					md5start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);

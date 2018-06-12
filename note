@@ -1,0 +1,17 @@
+hi0
+012
+
+bytes = 2
+hi x80
+01 2
+
+bytes++
+bytes = 3
+
+hi x80
+malloc 3
+
+hi x80
+malloc 4
+
+

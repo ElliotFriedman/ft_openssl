@@ -6,11 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 18:46:58 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/11 19:25:06 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
+
 
 void	block_end(t_hash *h)
 {
@@ -38,7 +39,7 @@ char	*add_byte(t_hash *h)
 	tmp = h->data;
 	h->bytes++;
 	snew = ft_memalloc(h->bytes);
-	h->data = (char *)ft_memcpy(snew, h->data, h->bytes);
+	h->data = (char *)ft_memcpy(snew, h->data, h->bytes - 1);
 	free(tmp);
 	return (h->data);
 }

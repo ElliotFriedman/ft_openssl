@@ -6,20 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 23:35:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 23:44:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/11 17:39:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
-
-unsigned int h0 = 0x6a09e667;
-unsigned int h1 = 0xbb67ae85;
-unsigned int h2 = 0x3c6ef372;
-unsigned int h3 = 0xa54ff53a;
-unsigned int h4 = 0x510e527f;
-unsigned int h5 = 0x9b05688c;
-unsigned int h6 = 0x1f83d9ab;
-unsigned int h7 = 0x5be0cd19;
 
 const unsigned int k[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -36,8 +27,34 @@ unsigned int	rr(unsigned int a, unsigned int shift)
 	return ((a >> shift) | (a << (32 - shift)));
 }
 
-void			sha256hash(something)
+void			print_bendian(t_sha *s, t_hash *h, t_opt *n)
 {
+	unsigned char *msg;
+
+
+	if (!n->q)
+		ft_printf("SHA256(%s)= ", h->name);
+	msg = (unsigned char *)&s->h0;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h1;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h2;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h3;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h4;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h5;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h6;
+	ft_printf("%02x%02x%02x%02x", msg[3], msg[2], msg[1], msg[0]);
+	msg = (unsigned char *)&s->h7;
+	ft_printf("%02x%02x%02x%02x\n", msg[3], msg[2], msg[1], msg[0]);
+}
+
+void			sha256hash(t_hash *hs, t_opt *nopt)
+{
+	t_sha			n;
 	unsigned int	a;
 	unsigned int	b;
 	unsigned int    c;
@@ -52,10 +69,21 @@ void			sha256hash(something)
 	unsigned int	s1;
 	unsigned int	S1;
 	unsigned int	S0;
+	unsigned int	maj;
+	unsigned int	ch;
 	size_t			ctr;
+	size_t			i;
+	unsigned int h0 = 0x6a09e667;
+	unsigned int h1 = 0xbb67ae85;
+	unsigned int h2 = 0x3c6ef372;
+	unsigned int h3 = 0xa54ff53a;
+	unsigned int h4 = 0x510e527f;
+	unsigned int h5 = 0x9b05688c;
+	unsigned int h6 = 0x1f83d9ab;
+	unsigned int h7 = 0x5be0cd19;
 
 	ctr = 0;
-	while (ctr < h->bytes)
+	while (ctr < hs->bytes)
 	{
 		/*		create a 64-entry message schedule array w[0..63] of 32-bit words
 				(The initial values in w[0..63] don't matter, so many implementations zero them here)
@@ -66,9 +94,9 @@ void			sha256hash(something)
 		i = 16;
 		while (i < 64)
 		{
-			s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ rr(w[i - 15], 3);
-			s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ rr(w[i - 2], 10);
-			w[i] = w[i - 16] + s0 + w[i - 7] + s1;
+			s0 = rr(hs->arr[ctr + i - 15], 7) ^ rr(hs->arr[ctr + i - 15], 18) ^ hs->arr[ctr + i - 15] >> 3;
+			s1 = rr(hs->arr[ctr + i - 2], 17) ^ rr(hs->arr[ctr + i - 2], 19) ^ hs->arr[ctr + i - 2] >> 10;
+			hs->arr[ctr + i] = hs->arr[ctr + i - 16] + s0 + hs->arr[ctr + i - 7] + s1;
 			i++;
 		}
 		i = 0;
@@ -80,11 +108,11 @@ void			sha256hash(something)
 		f = h5;
 		g = h6;
 		h = h7;
-		while (i < 63)
+		while (i < 64)
 		{
 			S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25);
 			ch = (e & f) ^ ((~e) & g);
-			temp1 = h + S1 + ch + k[i] + w[i];
+			temp1 = h + S1 + ch + k[i] + hs->arr[i];
 			S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22);
 			maj = (a & b) ^ (a & c) ^ (b & c);
 			temp2 = S0 + maj;
@@ -109,6 +137,14 @@ void			sha256hash(something)
 		i++;
 		ctr += 16;
 	}
-	print_bendian();
-	digest = h0 append h1 append h2 append h3 append h4 append h5 append h6 append h7;
+	n.h0 = h0;
+	n.h1 = h1;
+	n.h2 = h2;
+	n.h3 = h3;
+	n.h4 = h4;
+	n.h5 = h5;
+	n.h6 = h6;
+	n.h7 = h7;
+	print_bendian(&n, hs, nopt);
+	//	digest = h0 append h1 append h2 append h3 append h4 append h5 append h6 append h7;
 }
