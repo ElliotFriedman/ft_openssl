@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/11 22:06:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/12 20:11:41 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 int		shash(char *hash1, t_hash *h, t_opt *new)
 {
+//	ft_printf("%s\n", hash1);
 	if (!hash1)
 	{
 		ft_printf("Error!\n");
 		exit(0);
-	}	
+	}
 	h->data =  ft_strdup(hash1);
 	h->name = hash1;
 	h->bytes = ft_strlen(h->data);
@@ -72,9 +73,10 @@ void	md5start(char **argv, int argc)
 	{
 		while (get_opt(argc, argv, s, i) && (int)i < argc)
 			i++;
-		if (s->on && s->s)
-			shash(argv[i], h, s);
-		if (rstdin(h) && (int)i == argc)
+//		if (s->on && s->s)
+//			shash(argv[i], h, s);
+		ft_printf("i: %d argc: %d\n", i, argc);
+		if ((rstdin(h) && (int)i == argc) || (s->on && s->s))
 			shash(h->data, h, s);
 		else if (!fhash(argv[i], h, s))
 		{

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/11 19:18:23 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/12 14:23:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct			s_hash
 	char				*data;
 	size_t				bytes;
 	unsigned int		*arr;
+	unsigned int		end;
 }						t_hash;
 
 /*

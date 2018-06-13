@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/12 20:20:12 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/12 14:22:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*add_byte(t_hash *h)
 	free(tmp);
 	return (h->data);
 }
-/*
+
 void	epad(t_hash *h)
 {
 	int				dif;
@@ -62,6 +62,6 @@ void	epad(t_hash *h)
 		dif += 8;
 	}
 	free(buf);
-	block_end(h);
+	if (h->end)
+		block_end(h);
 }
-*/
