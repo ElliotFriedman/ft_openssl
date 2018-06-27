@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/25 12:37:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 10:11:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdlib.h>
-# include "macros.h"
+
+#define RR(a, shift) ((a >> shift) | (a << (32 - shift)))
+
 /*
  *this is for storing values associated with the md5 and sha256 algorithm
  */

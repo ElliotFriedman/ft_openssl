@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 17:04:26 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/26 23:46:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 13:58:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ void	swap(t_hash *h)
 
 	m = 0;
 	i = 0;
-	while (i < (h->bytes - 8) / 4)
+	print_bytes((void*)h->data, h->bytes);
+	while (i <= ((h->bytes) / 4))
 	{
 		h->arr[i] = swap_endian(h->arr[i]);
 		i++;
 	}
+	ft_printf("\ni after swap endian %d\n\n", i);
 /*	
  *	while (i < h->bytes / 4)
  *	{
@@ -67,6 +69,7 @@ int		s256hash(char *hash1, t_hash *h, t_opt *s)
 	h->arr = (unsigned int *)h->data;
 	swap(h);
 	//epad(h);
+	print_bytes((void*)h->data, h->bytes);
 	sha256hash(h, s);
 	ft_memdel((void**)&h->data);
 	return (1);

@@ -6,13 +6,29 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/26 21:08:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 12:23:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
  void    print_bytes(void *ptr, size_t size);
+
+
+static void ft_sha256_add_length(char *data, t_hash *h)
+{
+	unsigned long long length; 
+	
+	length = h->ini * 8;
+	data[63] = length;
+	data[62] = length >> 8;
+	data[61] = length >> 16;
+	data[60] = length >> 24;
+	data[59] = length >> 32;
+	data[58] = length >> 40;
+	data[57] = length >> 48;
+	data[56] = length >> 56;
+}
 
 void	block_end(t_hash *h)
 {
@@ -31,7 +47,8 @@ void	block_end(t_hash *h)
 	ctmp = ft_memalloc(h->bytes);
 	
 	h->data = ft_memcpy(ctmp, h->data, h->bytes - 8);
-	ft_memcpy(&h->data[h->bytes - 8], (void*)max, 8);
+	ft_sha256_add_length((h->data + h->bytes - 64), h);
+	//ft_memcpy(&h->data[h->bytes - 8], (void*)max, 8);
 	
 	//h->data = ft_memcpy(ctmp, (void*)max, 8);
 	

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 23:35:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/26 23:50:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 14:02:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ unsigned int k[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 	0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f,
 	0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
-unsigned int	rr(unsigned int a, unsigned int shift)
-{
-	return ((a >> shift) | (a << (32 - shift)));
-}
+//unsigned int	rr(unsigned int a, unsigned int shift)
+//{
+//	return ((a >> shift) | (a << (32 - shift)));
+//}
 
 void			print_bendian(t_sha *s, t_hash *h, t_opt *n)
 {
@@ -38,21 +38,21 @@ void			print_bendian(t_sha *s, t_hash *h, t_opt *n)
 	if (!n->q)
 		ft_printf("SHA256(%s)= ", h->name);
 	msg = (unsigned char *)&s->h0;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h1;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h2;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h3;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h4;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h5;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h6;
-	ft_printf("%02x%02x%02x%02x ", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 	msg = (unsigned char *)&s->h7;
-	ft_printf("%02x%02x%02x%02x\n", msg[0], msg[1], msg[2], msg[3]);
+	ft_printf("%02x%02x%02x%02x ", msg[3], msg[2], msg[1], msg[0]);
 }
 
 void			sha256hash(t_hash *hs, t_opt *nopt)
@@ -95,6 +95,8 @@ void			sha256hash(t_hash *hs, t_opt *nopt)
 	while (ctr < hs->bytes)
 	{
 		ft_memcpy(w, (void*)&hs->arr[x], 64);
+		ft_putstr("\nW in memory\n");
+		print_bytes((void*)w, 64);
 		i = 16;
 		while (i < 64)
 		{
@@ -138,9 +140,9 @@ void			sha256hash(t_hash *hs, t_opt *nopt)
 		h5 += f;
 		h6 += g;
 		h7 += h;
-		i++;
 		x += 16;
 		ctr += 64;
+		print_bytes((void*)w, 64 * 4);
 	}
 	n.h0 = h0;
 	n.h1 = h1;
