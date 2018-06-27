@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 18:17:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 14:27:21 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "openssl.h"
+#include "../openssl.h"
 
 int		opt(char *argv, t_opt *new, int *on)
 {

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 15:48:33 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/25 22:14:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 15:03:49 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ int		main(int argc, char **argv)
 	}
 	else
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
-//	while (1);
+	while(1);
 	return (0);
 }

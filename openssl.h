@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 10:11:54 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 15:30:18 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct			s_hash
 	unsigned int		*arr;
 	unsigned int		end;
 	unsigned int		pipe;
+	unsigned int		sha;
 }						t_hash;
 
 /*
@@ -88,6 +89,22 @@ typedef struct			s_iter
 
 typedef struct			s_sha
 {
+	unsigned int		a;
+	unsigned int		b;
+	unsigned int		c;
+	unsigned int		d;
+	unsigned int		e;
+	unsigned int		f;
+	unsigned int		g;
+	unsigned int		h;
+	unsigned int		temp1;
+	unsigned int		temp2;
+	unsigned int		s0;
+	unsigned int		s1;
+	unsigned int		S1;
+	unsigned int		S0;
+	unsigned int		maj;
+	unsigned int		ch;
 	unsigned int		h0;
 	unsigned int		h1;
 	unsigned int		h2;
@@ -107,6 +124,9 @@ void					sha256start(char **argv, int argc);
 void					md5start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);
+void					handle_out1(t_sha *s, t_hash *h, t_opt *n);
+void					whiled(t_sha *n, size_t i, unsigned int *w);
+void					t_sha_init(t_sha *n);
 int						rkey(t_hash *h);
 int						ft_fread(char *str, t_hash *h);
 

@@ -6,24 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/26 20:53:31 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 14:27:46 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "openssl.h"
-
-void	print_bytes(void *ptr, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < size)
-	{
-		ft_printf("%#2p ", ((unsigned char *)ptr)[i]);
-		i++;
-	}
-	ft_printf("\n\n\nTotal Bytes printed %d\n", i);
-}
+#include "../openssl.h"
 
 size_t	ft_flen(int fd)
 {
@@ -50,7 +37,6 @@ int		ft_fread(char *str, t_hash *h)
 	fd = open(str, O_RDONLY);
 	if (fd < 0)
 		return (0);
-		//ft_putstr("File is not valid\n");
 	else
 	{
 		h->fd = 1;
@@ -62,10 +48,7 @@ int		ft_fread(char *str, t_hash *h)
 		h->ini = asize;
 		h->bytes = h->ini;
 		close(fd);
-	 	ft_printf("size of file = %d\n", asize);
 		h->arr = (unsigned int *)h->data;
-	//	swap(h);
-		print_bytes((void*)h->data, h->bytes);
 		return (1);
 	}
 	return (0);
