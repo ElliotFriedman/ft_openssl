@@ -1,0 +1,6 @@
+FIX SEGFAULT
+
+swap endian of every byte except last 8 bytes
+create w of 64 uints
+hash
+print out memory as it is stored
