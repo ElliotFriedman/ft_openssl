@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 14:27:46 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 22:30:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int		rkey(t_hash *h)
 	ft_memdel((void**)&buf);
 	h->data = str;
 	h->ini = h->bytes;
+	h->pipe = 1;
 	return (1);
 }
 
@@ -96,9 +97,8 @@ int		rstdin(t_hash *h)
 			h->bytes++;
 			free(tmp);
 		}
-		str[h->bytes] = 0;
-		h->pipe = 1;
 		h->data = str;
+		h->pipe = 1;
 	}
 	h->ini = h->bytes;
 	return (h->bytes);

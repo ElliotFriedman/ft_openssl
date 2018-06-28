@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 14:27:21 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 22:30:33 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ int		opt(char *argv, t_opt *new, int *on)
 	}
 	return (0);
 }
-
-/*
- *
- *	Caller will deal with memory management
- *	Caller will deal with iterator, iterate from return
- *	values
- *
- */
 
 int		get_opt(int argc, char **argv, t_opt *new, int i)
 {

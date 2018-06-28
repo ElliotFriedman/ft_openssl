@@ -6,19 +6,16 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 14:27:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 22:34:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
- void    print_bytes(void *ptr, size_t size);
-
-
-static void ft_sha256_add_length(char *data, t_hash *h)
+static void	ft_sha256_add_length(char *data, t_hash *h)
 {
-	unsigned long long length; 
-	
+	unsigned long long length;
+
 	length = h->ini * 8;
 	data[63] = length;
 	data[62] = length >> 8;
@@ -30,7 +27,7 @@ static void ft_sha256_add_length(char *data, t_hash *h)
 	data[56] = length >> 56;
 }
 
-void	block_end(t_hash *h)
+void		block_end(t_hash *h)
 {
 	char				*tmp;
 	char				*ctmp;
@@ -38,28 +35,19 @@ void	block_end(t_hash *h)
 
 	max = ft_memalloc(8);
 	*max = 8 * h->ini;
-	
 	h->bytes += 8;
 	tmp = h->data;
-
 	ctmp = ft_memalloc(h->bytes);
-	
 	h->data = ft_memcpy(ctmp, h->data, h->bytes - 8);
 	if (h->sha)
 		ft_sha256_add_length((h->data + h->bytes - 64), h);
 	else
 		ft_memcpy(&h->data[h->bytes - 8], (void*)max, 8);
-	
-	//h->data = ft_memcpy(ctmp, (void*)max, 8);
-	
-	//h->data = ctmp;
-
-//	ft_printf("ctpm: %p tmp: %p\n", &ctmp, &tmp);
 	free(tmp);
 	free(max);
 }
 
-char	*add_byte(t_hash *h)
+char		*add_byte(t_hash *h)
 {
 	char	*snew;
 	char	*tmp;
@@ -72,7 +60,7 @@ char	*add_byte(t_hash *h)
 	return (h->data);
 }
 
-void	epad(t_hash *h)
+void		epad(t_hash *h)
 {
 	int				dif;
 	unsigned char	*buf;

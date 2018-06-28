@@ -6,13 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:18:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 14:09:53 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/06/27 23:41:16 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-const unsigned int K[64] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+const unsigned int g_ks[64] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
 	0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
@@ -29,17 +29,18 @@ const unsigned int K[64] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
 
-const int s[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17,
-	22, 5, 9, 14, 20, 5, 9, 14, 20,  5,  9, 14, 20, 5, 9, 14, 20,
-	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-	6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
+const int g_s[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17,
+	22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14,
+	20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16,
+	23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15,
+	21};
 
 void	handle_out(t_val new, t_hash *h, t_opt *opt)
 {
 	unsigned char	*msg;
 
-//	ft_printf("opt->s: %d\n", opt->s);
-	if ((opt->on && !opt->s && !opt->q && !opt->r && opt->p && !h->pipe) || (h->fd && !opt->q && !opt->r && !opt->p))
+	if ((opt->on && !opt->s && !opt->q && !opt->r && opt->p && !h->pipe)
+			|| (h->fd && !opt->q && !opt->r && !opt->p))
 		ft_printf("MD5 (%s) = ", h->name);
 	else if (opt->on && opt->s && !opt->q && !opt->r && !h->pipe)
 		ft_printf("MD5 (\"%s\") = ", h->name);
@@ -53,7 +54,7 @@ void	handle_out(t_val new, t_hash *h, t_opt *opt)
 	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
 	if (opt->on && opt->s && opt->r && !opt->q && !h->pipe)
 		ft_printf(" \"%s\"", h->name);
-	else if (!opt->q && !opt->s && opt->r)
+	else if (!opt->q && !opt->s && opt->r && !h->pipe)
 		ft_printf(" %s", h->name);
 	ft_putstr("\n");
 	h->fd = 0;
@@ -67,42 +68,42 @@ void	initv(t_val *new)
 	new->d0 = 0x10325476;
 }
 
-void	initz(t_iter *zed, t_val *new)
+void	initz(t_iter *z, t_val *new)
 {
-	zed->A = new->a0;
-	zed->B = new->b0;
-	zed->C = new->c0;
-	zed->D = new->d0;
-	zed->i = -1;
+	z->aa = new->a0;
+	z->bb = new->b0;
+	z->cc = new->c0;
+	z->dd = new->d0;
+	z->i = -1;
 }
 
-void	whilec(t_iter *zed, t_hash *h, size_t ctr)
+void	whilec(t_iter *z, t_hash *h, size_t ctr)
 {
-	if (zed->i <= 15)
+	if (z->i <= 15)
 	{
-		zed->F = (zed->B & zed->C) | ((~zed->B) & zed->D);
-		zed->g = zed->i;
+		z->ff = (z->bb & z->cc) | ((~z->bb) & z->dd);
+		z->g = z->i;
 	}
-	else if (zed->i <= 31)
+	else if (z->i <= 31)
 	{
-		zed->F = (zed->D & zed->B) | ((~zed->D) & zed->C);
-		zed->g = (5 * zed->i + 1) % 16;
+		z->ff = (z->dd & z->bb) | ((~z->dd) & z->cc);
+		z->g = (5 * z->i + 1) % 16;
 	}
-	else if (zed->i <= 47)
+	else if (z->i <= 47)
 	{
-		zed->F = zed->B ^ zed->C ^ zed->D;
-		zed->g = (3 * zed->i + 5) % 16;
+		z->ff = z->bb ^ z->cc ^ z->dd;
+		z->g = (3 * z->i + 5) % 16;
 	}
-	else if (zed->i <= 63)
+	else if (z->i <= 63)
 	{
-		zed->F = zed->C ^ (zed->B | (~zed->D));
-		zed->g = (7 * zed->i) % 16;
+		z->ff = z->cc ^ (z->bb | (~z->dd));
+		z->g = (7 * z->i) % 16;
 	}
-	zed->F = zed->F + zed->A + K[zed->i] + h->arr[zed->g + ctr];
-	zed->A = zed->D;
-	zed->D = zed->C;
-	zed->C = zed->B;
-	zed->B = zed->B + ((zed->F << s[zed->i]) | (zed->F >> (32 - s[zed->i])));
+	z->ff = z->ff + z->aa + g_ks[z->i] + h->arr[z->g + ctr];
+	z->aa = z->dd;
+	z->dd = z->cc;
+	z->cc = z->bb;
+	z->bb = z->bb + ((z->ff << g_s[z->i]) | (z->ff >> (32 - g_s[z->i])));
 }
 
 void	hash(t_hash *h, t_opt *opt)
@@ -122,10 +123,10 @@ void	hash(t_hash *h, t_opt *opt)
 		while (++zed.i < 64)
 			whilec(&zed, h, ctr);
 		ctr += 16;
-		new.a0 += zed.A;
-		new.b0 += zed.B;
-		new.c0 += zed.C;
-		new.d0 += zed.D;
+		new.a0 += zed.aa;
+		new.b0 += zed.bb;
+		new.c0 += zed.cc;
+		new.d0 += zed.dd;
 		d += 64;
 	}
 	handle_out(new, h, opt);

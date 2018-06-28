@@ -1,1 +1,0 @@
-catting a file and echoing in both go to stdin which is fd 0

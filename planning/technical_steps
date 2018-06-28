@@ -1,9 +1,0 @@
-append 1 then 0 til we hit a 448 bits
-
-make a struct to store how many bits we have
-store how many 512 bit blocks we have
-copy each block into a 2d array of char * each with 512 bits
-
-Then shift
-itoabase16 values that come out of function
-print them out in reverse due to little endian
