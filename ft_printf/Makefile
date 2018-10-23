@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/04 17:04:47 by efriedma          #+#    #+#              #
-#    Updated: 2018/06/06 14:41:27 by efriedma         ###   ########.fr        #
+#    Updated: 2018/10/23 00:15:11 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SRC = handle/handle_flags.c \
 	  print/ft_print_addy.c \
 	  print/ft_printint.c \
 	  chars/ft_printchr.c \
-	  chars/ft_printwchr.c \
+	  chars/ft_printwchr.c 
 
 
 OBJ = $(SRC:.c=.o)

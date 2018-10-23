@@ -6,15 +6,15 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/06/27 23:54:55 by efriedma         ###   ########.fr        #
+#    Updated: 2018/10/23 00:21:12 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#-fsanitize=address 
-
-CFLAGS = -g -fsanitize=address -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
+CFLAGS = -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_ssl
+
+PRINTF := ft_printf/
 
 SRCS = main.c \
        helper/pad.c \
@@ -27,20 +27,21 @@ SRCS = main.c \
        sha256/sha256hash.c \
        sha256/sha256.c \
 	   sha256/sha256n.c \
-	   sha256/sha256n2.c \
+	   sha256/sha256n2.c 
 
 OBJ = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -g *.o -fsanitize=address md5/*.o sha256/*.o helper/*.o ft_printf/libftprintf.a -o $(NAME)
-	@make -C ft_printf
+	@make -C ft_printf/
+	gcc $(OBJ) ft_printf/libftprintf.a -o $(NAME)
 
 clean:
-	rm *.o && rm md5/*.o && rm sha256/*.o && rm helper/*.o
+	rm -f $(OBJ)
+	make -C $(PRINTF) clean
 
 fclean: clean
-	rm $(NAME)
+	rm -f $(NAME)
 
 re: fclean $(NAME)
