@@ -6,12 +6,15 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:46:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 01:21:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
+t_hash		h;
+t_opt		s;
+	
 int		shash(char *hash1, t_hash *h, t_opt *new)
 {
 	if (new->p && hash1 && h->pipe)
@@ -54,29 +57,27 @@ int		zeroh(t_opt *h, t_hash *hash)
 
 void	md5start(char **av, int a)
 {
-	t_hash		*h;
-	t_opt		*s;
 	int			file;
 
-	init_a(&h, &s, &file);
-	h->i = get_opt_loopb(h->i, a, av, s);
-	if ((h->i != 2 && rstdin(h)) || (((int)h->i == a) && (s->p || rstdin(h))))
-		shash(h->data, h, s);
-	else if (a == (int)h->i && rkey(h) && (s->q = 1))
-		shash(h->data, h, s);
-	else if (a == (int)h->i && rstdin(h) && seta(h, s))
-		shash(h->data, h, s);
-	while ((int)h->i < a)
+	file = 0;
+	h.i = get_opt_loop(2, a, av, &s);
+	if ((h.i != 2 && rstdin(&h)) || (((int)h.i == a) && (s.p || rstdin(&h))))
+		shash(h.data, &h, &s);
+	else if (a == (int)h.i && rkey(&h) && (s.q = 1))
+		shash(h.data, &h, &s);
+	else if (a == (int)h.i && rstdin(&h) && (h.pipe = 1) && (s.p = 1))
+		shash(h.data, &h, &s);
+	while ((int)h.i < a)
 	{
-		while (!file && get_opt(a, av, s, h->i) && (int)h->i < a)
-			h->i++;
-		if (!file && s->on && s->s)
-			shash(av[h->i], h, s);
-		else if (!fhash(av[h->i], h, s, &file))
-			ft_printf("ft_ssl: md5: %s: No such file or directory\n", av[h->i]);
-		else if (!file && ((int)h->i == a && rstdin(h)))
-			shash(h->data, h, s);
-		((int)(h->i + 1) == a && zeroh(s, h)) ? h->i++ : h->i++;
+		while (!file && get_opt(a, av, &s, h.i) && (int)h.i < a)
+			h.i++;
+		if (!file && s.on && s.s)
+			shash(av[h.i], &h, &s);
+		else if (!fhash(av[h.i], &h, &s, &file))
+			ft_printf("ft_ssl: md5: %s: No such file or directory\n", av[h.i]);
+		else if (!file && ((int)h.i == a && rstdin(&h)))
+			shash(h.data, &h, &s);
+		zeroh(&s, &h);
+		h.i++;
 	}
-	fstruct(s, h);
 }

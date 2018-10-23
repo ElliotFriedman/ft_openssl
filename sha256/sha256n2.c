@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:52:32 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:53:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 01:26:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,6 @@ void			swap(t_hash *h)
 		h->arr[i] = swap_endian(h->arr[i]);
 		i++;
 	}
-}
-
-void			err(void)
-{
-	ft_printf("sha256: option requires an argument -- s\n");
-	ft_printf("usage: sha256 [-pqrtx] [-s string] [files ...]\n");
-	exit(0);
-}
-
-void			ffstruct(t_opt *opt, t_hash *h)
-{
-	ft_memdel((void**)&h);
-	ft_memdel((void**)&opt);
 }
 
 void			zer0h(t_opt *h, t_hash *hash)

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/23 00:42:37 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 01:26:41 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,22 +105,14 @@ void					epad(t_hash *h);
 void					handle_out1(t_sha *s, t_hash *h, t_opt *n);
 void					whiled(t_sha *n, size_t i, unsigned int *w);
 void					t_sha_init(t_sha *n);
-void					error(void);
-int						fstruct(t_opt *opt, t_hash *h);
-void					init_a(t_hash **h, t_opt **s, int *file);
-size_t					get_opt_loopb(size_t i, int a, char **av, t_opt *s);
-int						seta(t_hash *h, t_opt *s);
 int						rkey(t_hash *h);
 int						ft_fread(char *str, t_hash *h);
-void					p1(char **argv, t_hash *h);
 void					set_n_run(t_hash *h, t_opt *s);
 int						one_two(int argc, t_opt *s, t_hash *h);
 int						do_one(t_opt *s, t_hash *h, int *file);
 size_t					get_opt_loop(size_t i, int argc, char **argv, t_opt *s);
 void					zer0h(t_opt *h, t_hash *hash);
 int						s256hash(char *hash1, t_hash *h, t_opt *s);
-void					err(void);
 void					swap(t_hash *h);
-void					ffstruct(t_opt *opt, t_hash *h);
 
 #endif
