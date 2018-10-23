@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 17:04:26 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:58:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 00:46:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void			sha256start(char **argv, int argc)
 		if (!file && s->on && s->s)
 			s256hash(argv[h->i], h, s);
 		else if (!f256hash(argv[h->i], h, s, &file))
-			p1(argv, h);
+			ft_printf("ft_ssl: md5: %s: No such file or directory\n", argv[h->i]);
 		else if (!file && ((int)h->i == argc && rstdin(h)))
 			s256hash(h->data, h, s);
 		zer0h(s, h);

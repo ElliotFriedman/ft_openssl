@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 23:35:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 22:37:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 00:42:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,26 @@ unsigned int g_k[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 
 void			cmpct(t_sha *n)
 {
-	n->a = n->h0;
-	n->b = n->h1;
-	n->c = n->h2;
-	n->d = n->h3;
-	n->e = n->h4;
-	n->f = n->h5;
-	n->g = n->h6;
-	n->h = n->h7;
+	n->a = n->h0[0];
+	n->b = n->h0[1];
+	n->c = n->h0[2];
+	n->d = n->h0[3];
+	n->e = n->h0[4];
+	n->f = n->h0[5];
+	n->g = n->h0[6];
+	n->h = n->h0[7];
 }
 
 void			cmpct1(t_sha *n)
 {
-	n->h0 += n->a;
-	n->h1 += n->b;
-	n->h2 += n->c;
-	n->h3 += n->d;
-	n->h4 += n->e;
-	n->h5 += n->f;
-	n->h6 += n->g;
-	n->h7 += n->h;
+	n->h0[0] += n->a;
+	n->h0[1] += n->b;
+	n->h0[2] += n->c;
+	n->h0[3] += n->d;
+	n->h0[4] += n->e;
+	n->h0[5] += n->f;
+	n->h0[6] += n->g;
+	n->h0[7] += n->h;
 }
 
 void			while1(t_sha *n, size_t *i, unsigned int *w)
@@ -61,10 +61,10 @@ void			sha256hash(t_hash *hs, t_opt *nopt)
 	t_sha			n;
 	size_t			ctr;
 	size_t			i;
-	unsigned int	*w;
+	unsigned int	w[64];
 	size_t			x;
 
-	t_sha_init(&n, &w);
+	t_sha_init(&n);
 	x = 0;
 	ctr = 0;
 	while (ctr < hs->bytes)
@@ -81,6 +81,5 @@ void			sha256hash(t_hash *hs, t_opt *nopt)
 		x += 16;
 		ctr += 64;
 	}
-	ft_memdel((void*)&w);
 	handle_out1(&n, hs, nopt);
 }

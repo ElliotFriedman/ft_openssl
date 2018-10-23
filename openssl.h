@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:57:23 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 00:42:37 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,28 +90,21 @@ typedef struct			s_sha
 	unsigned int		ss0;
 	unsigned int		maj;
 	unsigned int		ch;
-	unsigned int		h0;
-	unsigned int		h1;
-	unsigned int		h2;
-	unsigned int		h3;
-	unsigned int		h4;
-	unsigned int		h5;
-	unsigned int		h6;
-	unsigned int		h7;
+	unsigned int		h0[8];
 }						t_sha;
 
 int						rstdin(t_hash *h);
-int						get_opt(int argc, char **argv, t_opt *new, int i);
+int						get_opt(int argc, char **argv, t_opt *n, int i);
 void					md5hash(char *str);
 void					sha256hash(t_hash *hs, t_opt *nopt);
-void					hash(t_hash *h, t_opt *new);
+void					hash(t_hash *h, t_opt *n);
 void					sha256start(char **argv, int argc);
 void					md5start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);
 void					handle_out1(t_sha *s, t_hash *h, t_opt *n);
 void					whiled(t_sha *n, size_t i, unsigned int *w);
-void					t_sha_init(t_sha *n, unsigned int **w);
+void					t_sha_init(t_sha *n);
 void					error(void);
 int						fstruct(t_opt *opt, t_hash *h);
 void					init_a(t_hash **h, t_opt **s, int *file);

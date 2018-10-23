@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:48:01 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:48:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/23 00:45:35 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,4 @@ void			set_n_run(t_hash *h, t_opt *s)
 	h->pipe = 1;
 	s->p = 1;
 	s256hash(h->data, h, s);
-}
-
-void			p1(char **argv, t_hash *h)
-{
-	ft_printf("ft_ssl: md5: %s: No such file or directory\n", argv[h->i]);
 }
