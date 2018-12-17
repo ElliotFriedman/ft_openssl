@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 22:34:45 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/12/17 00:53:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void		epad(t_hash *h)
 {
 	int				dif;
 	unsigned char	*buf;
+	//char			*tmp1;
 	size_t			tmp;
 
 	buf = ft_umalset(1, 128);
@@ -74,6 +75,11 @@ void		epad(t_hash *h)
 	dif += 8;
 	while (dif % 512 != 448)
 	{
+		//h->bytes++;
+		//buf = ft_memalloc(h->bytes);
+		//tmp1 = h->data;
+		//h->data = (char *)ft_memcpy(buf, h->data, h->bytes - 1);
+		//free(tmp1);
 		h->data = add_byte(h);
 		dif += 8;
 	}

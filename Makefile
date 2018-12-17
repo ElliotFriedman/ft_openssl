@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/10/23 01:22:28 by efriedma         ###   ########.fr        #
+#    Updated: 2018/12/17 00:54:14 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ CFLAGS = -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 NAME = ft_ssl
 
 PRINTF := ft_printf/
+
 
 SRCS = main.c \
        helper/pad.c \

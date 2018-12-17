@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/23 01:21:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/12/17 00:58:41 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	md5start(char **av, int a)
 {
 	int			file;
 
+	//if argc is 1 or 2, doesn't matter, read from standard input
+	//
+	//else check for flags and iterate to next option
 	file = 0;
 	h.i = get_opt_loop(2, a, av, &s);
 	if ((h.i != 2 && rstdin(&h)) || (((int)h.i == a) && (s.p || rstdin(&h))))
